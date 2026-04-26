@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- WSL compat for system clipboard yank
 if vim.fn.has("wsl") == 1 then
-  vim.g.clipboard = {
+    vim.g.clipboard = {
     name = "wsl-clipboard",
     copy = {
       ["+"] = "wl-copy",
@@ -31,5 +31,15 @@ if vim.fn.has("wsl") == 1 then
       ['*'] = 'wl-paste --no-newline',
     },
     cache_enabled = 0,
-  }
+    }
+    -- removes weird return characters from WSL paste
+    vim.api.nvim_create_autocmd("BufReadPost", {
+        callback = function()
+            if vim.bo.fileformat == "dos" then
+                vim.cmd("silent! %s/\\r//g")
+                vim.bo.fileformat = "unix"
+            end
+        end,
+    })
 end
+
