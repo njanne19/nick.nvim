@@ -1,3 +1,5 @@
+vim.filetype.add({ extension = { ibd = "json" } })
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
@@ -10,6 +12,7 @@ vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
 vim.opt.clipboard = "unnamedplus"
 vim.opt.guicursor = "i-ci-ve:block-blinkwait300-blinkon200-blinkoff150"
+vim.opt.undofile = true
 
 -- Highlight when you yank
 vim.api.nvim_create_autocmd("TextYankPost", {

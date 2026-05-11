@@ -10,7 +10,7 @@ return {
         dependencies = { "williamboman/mason.nvim" },
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "clangd", "pyright", "rust_analyzer", "lua_ls" },
+                ensure_installed = { "clangd", "pyright", "rust_analyzer", "lua_ls", "ts_ls", "jsonls" },
                 automatic_installation = true,
             })
         end,
@@ -23,7 +23,21 @@ return {
 
             vim.lsp.config("clangd", { capabilities  = capabilities })
             vim.lsp.config("pyright", { capabilities  = capabilities })
-            vim.lsp.config("rust_analyzer", { capabilities  = capabilities })
+            vim.lsp.config("rust_analyzer", {
+                capabilities = capabilities,
+                settings = {
+                    ["rust-analyzer"] = {
+                        inlayHints = {
+                            parameterHints = { enable = true },
+                            typeHints = { enable = true },
+                            chainingHints = { enable = true },
+                            closureReturnTypeHints = { enable = "always" },
+                        },
+                    },
+                },
+            })
+            vim.lsp.config("ts_ls", { capabilities = capabilities })
+            vim.lsp.config("jsonls", { capabilities = capabilities })
             vim.lsp.config("lua_ls", {
                 capabilities = capabilities,
                 settings = {
@@ -39,8 +53,7 @@ return {
                     },
                 },
             })
-            vim.lsp.enable({ "clangd", "pyright", "rust_analyzer", "lua_ls" })
-            
+            vim.lsp.enable({ "clangd", "pyright", "rust_analyzer", "lua_ls", "ts_ls", "jsonls" })
             -- Keymaps
             vim.api.nvim_create_autocmd("LspAttach", {
                 callback = function(args)
@@ -55,6 +68,7 @@ return {
                     vim.keymap.set("n", "<leader>d", function() vim.diagnostic.open_float() end, opts)
                     vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, opts)
                     vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, opts)
+                    vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
                 end,
             })
         end,
