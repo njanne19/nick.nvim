@@ -35,3 +35,6 @@ end, { desc = "Toggle Inlay Hints" })
 
 -- Diagnostics quick fix list
 vim.keymap.set('n', '<leader>x', vim.diagnostic.setqflist, { desc = 'Open diagnostic quickfix list' })
+
+-- Clear search highlight on Escape
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
